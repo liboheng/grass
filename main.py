@@ -4,8 +4,8 @@ import os
 import random
 import sys
 import traceback
+import asyncio
 
-import aiohttp
 from art import text2art
 from imap_tools import MailboxLoginError
 from termcolor import colored, cprint
@@ -110,14 +110,12 @@ async def worker_task(_id, account: str, proxy: str = None, wallet: str = None, 
     #     logger.warning(e)
     except EmailApproveLinkNotFoundException as e:
         logger.warning(e)
-    except aiohttp.ClientError as e:
-        logger.warning(f"{_id} | Some connection error: {e}...")
     except Exception as e:
         logger.error(f"{_id} | not handled exception | error: {e} {traceback.format_exc()}")
     finally:
         if grass:
             await grass.session.close()
-            # await grass.ws_session.close()
+            await grass.ws_session.close()
 
 
 async def main():
@@ -186,13 +184,13 @@ async def main():
     await db.close_connection()
 
 
+def set_event_loop_policy():
+    if sys.platform == 'win32':
+        from asyncio import WindowsSelectorEventLoopPolicy
+        asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
+
+
 if __name__ == "__main__":
     bot_info("GRASS_AUTO")
-
-    if sys.platform == 'win32':
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-        loop = asyncio.ProactorEventLoop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(main())
-
+    set_event_loop_policy()
     asyncio.run(main())
