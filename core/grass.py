@@ -99,10 +99,10 @@ class Grass(GrassWs, GrassRest, FailureCounter):
                 await self.auth_to_extension(browser_id, user_id)
 
                 if self.proxy_score is None:
-                    await asyncio.sleep(1)
+                    # await asyncio.sleep(1)
 
-                    if MIN_PROXY_SCORE:
-                        await self.handle_proxy_score(MIN_PROXY_SCORE, browser_id)
+                    # if MIN_PROXY_SCORE:
+                        # await self.handle_proxy_score(MIN_PROXY_SCORE, browser_id)
 
                     await self.handle_http_request_action()
 
