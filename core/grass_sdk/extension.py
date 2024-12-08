@@ -80,18 +80,10 @@ class GrassWs:
                 "user_id": user_id,
                 "user_agent": self.user_agent,
                 "timestamp": int(time.time()),
-                "device_type": "extension",
-                "version": "4.26.2",
-                "extension_id": "lkbnfiajjmbhnfledhphioinpickokdi"
-            }
-        }
-
-        if USE_2XNODE:
-            message['result'].update({
                 "device_type": "desktop",
                 "version": "4.28.2",
-            })
-            message['result'].pop("extension_id")
+            }
+        }
 
         await self.send_message(json.dumps(message))
 
